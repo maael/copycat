@@ -111,6 +111,18 @@ io.on('connection', client => {
           copycatWon: copycatGuessedWord && copycatGuessedWord.vote.word === existingRoom.game.selectedWord,
           guessedCopycat: copycatPlayerGuessCorrect
         });
+      } else if (existingRoom.game.state === GameState.end) {
+        existingRoom.game.votes = {
+          [GameState.start]: [],
+          [GameState.talking]: [],
+          [GameState.decision]: [],
+          [GameState.end]: [],
+          [GameState.categoryVote]: []
+        }
+        existingRoom.game.selectedWord = undefined;
+        existingRoom.game.copycat = undefined;
+        existingRoom.game.words = undefined;
+        existingRoom.game.state = GameState.start;
       }
     }
     emitGameChange(io, room);

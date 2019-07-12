@@ -163,7 +163,13 @@ export default class Index extends React.Component<{room?: string}, State> {
               </>
             )}
           </>
-        ) : null}
+        ) : this.state.game && this.state.game.state === GameState.end ? (
+          <>
+            {isPlayerDone ? null : <button onClick={() => {
+              this.socket.emit(Events.vote, {state: this.state.game.state});
+            }}>Reset!</button>}
+          </>
+        ) :null}
       </div>
     )
   }
