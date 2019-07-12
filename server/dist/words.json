@@ -1,0 +1,14 @@
+{
+  "basic": [
+    "Knight", "Castle", "Armour", "Sky", "Airplane", "Moon", "Sun", "Stars", "War"
+  ],
+  "food": [
+    "Burger", "Sandwich", "Cheesecake", "Cupcake", "Chips", "Apple", "Orange", "Lemon", "Pasta"
+  ],
+  "drinks": [
+    "Coke", "Pepsi", "Dr Pepper", "Sprite", "Orange Juice", "Apple Juice", "Tea", "Coffee", "Hot Chocolate"
+  ],
+  "alcohol": [
+    "Vodka", "Whiskey", "Rum", "Tequila", "Wine", "Beer", "Cider", "Processeco", "Liquor"
+  ]
+}

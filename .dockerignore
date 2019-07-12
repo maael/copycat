@@ -1,0 +1,6 @@
+node_modules/
+.circleci/
+Dockerfile
+.dockerignore
+.gitignore
+.next
