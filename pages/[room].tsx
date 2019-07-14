@@ -68,7 +68,9 @@ export default class Index extends React.Component<{room?: string}, State> {
       playerId,
       name
     });
-    this.socket = io(`${window.location.protocol}//${window.location.hostname}:3030`, {
+    const hostname = window.location.hostname === 'localhost' ? window.location.hostname : `${window.location.hostname}-ws`
+    const port = window.location.hostname === 'localhost' ? ':3030' : '';
+    this.socket = io(`${window.location.protocol}//${hostname}${port}`, {
       query: params.toString()
     });
     this.socket.on(Events.loadCategories, ({categories}) => {
