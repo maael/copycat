@@ -70,6 +70,7 @@ export default class Index extends React.Component<{room?: string}, State> {
     });
     const hostname = window.location.hostname === 'localhost' ? window.location.hostname : `${window.location.hostname}-ws`
     const port = window.location.hostname === 'localhost' ? ':3030' : '';
+    console.info('connecting to', `${window.location.protocol}//${hostname}${port}`);
     this.socket = io(`${window.location.protocol}//${hostname}${port}`, {
       query: params.toString()
     });

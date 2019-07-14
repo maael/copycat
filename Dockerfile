@@ -8,9 +8,6 @@ RUN yarn install --production --ignore-scripts --prefer-offline
 FROM mhart/alpine-node:base-11
 WORKDIR /repo
 COPY --from=build /repo .
-RUN ls
-RUN ls node_modules/.bin
-RUN pwd
 
 EXPOSE 3000
 EXPOSE 3030
