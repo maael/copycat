@@ -1,14 +1,12 @@
 import Link from 'next/link';
+import Header from '../components/Header';
+
+const meowId = `/meow-${Math.floor(Math.random()*100000)}`;
 
 export default () => (
   <div>
-    <Link href='/'>
-      <div style={{width: '100vw', textAlign: 'center', marginTop: '2em', cursor: 'pointer'}}>
-        <span style={{backgroundColor: '#EE6C4D', backgroundImage: 'url(/static/cat-face.png)', backgroundSize: 100, backgroundRepeat: 'no-repeat', backgroundPosition: 'top', height: 110, width: 110, borderRadius: 75, display: 'inline-block'  }} />
-        <h1>Copycat</h1>
-      </div>
-    </Link>
-    <Link href={`/meow-${Math.floor(Math.random()*100000)}`}>
+    <Header />
+    <Link href={meowId}>
       <div style={{cursor: 'pointer', color: '#FFFFFF', fontWeight: 'bold', maxWidth: 600, margin: '0 auto', backgroundColor: '#3D5A80', padding: 20, textAlign: 'center'}}>
         Start a new game!
       </div>

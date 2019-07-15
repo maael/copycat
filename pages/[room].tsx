@@ -3,6 +3,8 @@ import Link from 'next/link';
 import io from 'socket.io-client';
 import uuid from 'uuid/v4';
 
+import Header from '../components/Header';
+
 import {Game, Player, Events, GameState, Result} from '../server/types';
 
 interface State {
@@ -42,41 +44,24 @@ const styles = {
     marginLeft: 10
   },
   center: {
-    textAlign: 'center' as 'center',
+    textAlign: 'center',
     width: '100vw'
   },
   shareBanner: {
     backgroundColor: '#F1866D',
-    textAlign: 'center' as 'center',
+    textAlign: 'center',
     fontSize: 14,
     padding: '2px 20px'
   },
   shareBannerLink: {
-    fontWeight: 'bold' as 'bold',
+    fontWeight: 'bold',
     color: '#FFFFFF'
   },
   shareBannerClose: {
-    cursor: 'pointer' as 'pointer',
-    position: 'absolute' as 'absolute',
+    cursor: 'pointer',
+    position: 'absolute',
     right: 10,
     top: 1
-  },
-  mainHeader: {
-    width: '100vw',
-    textAlign: 'center' as 'center',
-    marginTop: '2em',
-    cursor: 'pointer' as 'pointer'
-  },
-  mainHeaderCat: {
-    backgroundColor: '#EE6C4D',
-    backgroundImage: 'url(/static/cat-face.png)',
-    backgroundSize: 100,
-    backgroundRepeat: 'no-repeat',
-    backgroundPosition: 'top',
-    height: 110,
-    width: 110,
-    borderRadius: 75,
-    display: 'inline-block'
   },
   playerTag: {
     padding: 10,
@@ -112,7 +97,7 @@ const styles = {
     backgroundColor: '#EE6C4D',
     margin: 5
   }
-}
+} as const;
 
 const chunk = (arr: string[]) => {
   return arr.reduce<string[][]>((ar, el, i) => {
@@ -220,12 +205,7 @@ export default class Index extends React.Component<{room?: string}, State> {
             <span onClick={() => this.setState({showJoin: false})} style={styles.shareBannerClose}>x</span>
           </div>
         ) : null}
-        <Link href='/'>
-          <div style={styles.mainHeader}>
-            <span style={styles.mainHeaderCat} />
-            <h1>Copycat</h1>
-          </div>
-        </Link>
+        <Header />
         {waitingForStart ? (
           <div style={styles.center}>Game in progress, waiting for it to finish</div>
         ) : (
