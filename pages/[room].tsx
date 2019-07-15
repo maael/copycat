@@ -96,6 +96,12 @@ const styles = {
     padding: 10,
     backgroundColor: '#EE6C4D',
     margin: 5
+  },
+  butBanner: {
+    color: '#EE6C4D',
+    fontSize: 32,
+    padding: 10,
+    margin: 15
   }
 } as const;
 
@@ -186,6 +192,9 @@ export default class Index extends React.Component<{room?: string}, State> {
 
   componentDidMount () {
     this.connect();
+    if (typeof window !== 'undefined') {
+      this.setState({showJoin: !!!localStorage.getItem(window.location.pathname)});
+    }
   }
   componentDidUpdate (_props, {playerId, name}: State) {
     if (typeof window !== undefined) {
@@ -202,7 +211,12 @@ export default class Index extends React.Component<{room?: string}, State> {
         {game.state === GameState.start && showJoin ? (
           <div style={styles.shareBanner}>
             Share <a style={styles.shareBannerLink} href={typeof window !== 'undefined' ? window.location.href : ''}>{typeof window !== 'undefined' ? window.location.href : ''}</a> with your friends
-            <span onClick={() => this.setState({showJoin: false})} style={styles.shareBannerClose}>x</span>
+            <span onClick={() => {
+              this.setState({showJoin: false});
+              if (typeof window !== 'undefined') {
+                localStorage.setItem(window.location.pathname, 'true');
+              }
+            }} style={styles.shareBannerClose}>x</span>
           </div>
         ) : null}
         <Header />
@@ -236,8 +250,9 @@ export default class Index extends React.Component<{room?: string}, State> {
             </div>
             {result ? (
               <div style={styles.center}>
-                {result.copycatWon ? <div style={styles.winBanner}>The copycat guessed the word correcty!</div> : null}
                 {result.guessedCopycat ? <div style={styles.winBanner}>The team guessed who the copycat was!</div> : null}
+                {result.guessedCopycat && result.copycatWon ? <div style={styles.butBanner}>BUT</div> : null}
+                {result.copycatWon ? <div style={styles.winBanner}>The copycat guessed the word correcty!</div> : null}
               </div>
             ) : null}
             {isPlayerTheCopycat ? <div style={styles.copycatBanner}>
