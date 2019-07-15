@@ -62,7 +62,7 @@ const WordsBox = (words: string[], isPlayerTheCopycat: boolean, selectedWord: st
 
 const PlayerList = (players: Pick<Player, 'id' | 'name'>[], playerId: string, onClick: (id: string) => void) => (
   players.filter(({id}) => id !== playerId).map(({id, name}) => (
-    <span key={id} style={{padding: 5, background: 'rebeccapurple', borderRadius: 5, margin: 5, color: 'white', cursor: 'pointer'}} onClick={() => onClick(id)}>
+    <span key={id} style={{padding: 10, background: '#EE6C4D', borderRadius: 5, margin: 5, color: 'white', cursor: 'pointer'}} onClick={() => onClick(id)}>
       {name || id}
     </span>
   ))
@@ -97,7 +97,7 @@ export default class Index extends React.Component<{room?: string}, State> {
     const params = new URLSearchParams({
       room,
       playerId,
-      name
+      name: name || '😺 Mysterious Cat'
     });
     const hostnameParts = window.location.hostname.split('.');
     if (window.location.hostname !== 'localhost') {
@@ -149,17 +149,17 @@ export default class Index extends React.Component<{room?: string}, State> {
               if (target.value.length > 50) return;
               this.setState({name: target.value})
               this.socket.emit(Events.nameChange, {name: target.value})
-            }} />     
-          </div>   
+            }} />
+          </div>
           <div style={styles.header}>
             <h2>Players</h2>
           </div>
           <div style={styles.center}>
             {this.state.players.filter(({id}) => id !== this.state.playerId).map(({id, name}) => {
               return (
-                <span key={id} style={{padding: 5, background: 'rebeccapurple', borderRadius: 5, margin: 5, color: 'white'}}>
+                <span key={id} style={{padding: 10, background: '#EE6C4D', borderRadius: 5, margin: 5, color: 'white'}}>
                   {name || id}
-                  {this.state.game.state !== GameState.end ? this.state.game && this.state.game.state && this.state.game.votes[this.state.game.state] && this.state.game.votes[this.state.game.state].find(({id: voteId}) => voteId === id) ? '✅' : '❔' : null}
+                  {this.state.game.state !== GameState.end ? this.state.game && this.state.game.state && this.state.game.votes[this.state.game.state] && this.state.game.votes[this.state.game.state].find(({id: voteId}) => voteId === id) ? ' ✅' : '❔' : null}
                 </span>
               )
             })}
@@ -208,17 +208,17 @@ export default class Index extends React.Component<{room?: string}, State> {
           ) : this.state.game && this.state.game.state === GameState.decision ? (
             <>
               {WordsBox(this.state.game.words, isPlayerTheCopycat, this.state.game.selectedWord, isPlayerTheCopycat ? (word) => {
-                console.info('word', word);
                 this.socket.emit(Events.vote, {state: this.state.game.state, word});
               } : undefined)}
               <div style={styles.center}>
-              {isPlayerTheCopycat ? 'What\'s the word?' : (
+              {isPlayerTheCopycat ? <div style={{margin: 20}}>What's the word?</div> : (
                 <>
-                  Who's the copycat!?!
-                  {PlayerList(this.state.players, this.state.playerId, (id) => {
-                    console.info('-> id', id);
-                    this.socket.emit(Events.vote, {state: this.state.game.state, player: id});
-                  })}
+                  <div style={{margin: 20}}>Who's the copycat!?!</div>
+                  <div style={styles.center}>
+                    {PlayerList(this.state.players, this.state.playerId, (id) => {
+                      this.socket.emit(Events.vote, {state: this.state.game.state, player: id});
+                    })}
+                  </div>
                 </>
               )}
               </div>
