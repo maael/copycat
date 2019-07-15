@@ -55,14 +55,14 @@ const chunk = (arr: string[]) => {
 const WordsBox = (words: string[], isPlayerTheCopycat: boolean, selectedWord: string, onClick?: (word: string) => void) => (
   chunk(words).map((words, i) => (
     <div key={i} style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100vw'}}>
-      {words.map((word) => <div key={word} style={{padding: 20, width: '30vw', textAlign: 'center', backgroundColor: selectedWord === word && !isPlayerTheCopycat ? '#EE6C4D' : 'initial'}} onClick={() => onClick && onClick(word)}>{word}</div>)}
+      {words.map((word) => <div key={word} style={{padding: 20, width: '30vw', textAlign: 'center', backgroundColor: selectedWord === word && !isPlayerTheCopycat ? '#EE6C4D' : 'initial', cursor: onClick ? 'pointer' : 'default'}} onClick={() => onClick && onClick(word)}>{word}</div>)}
     </div>
   ))
 )
 
 const PlayerList = (players: Pick<Player, 'id' | 'name'>[], playerId: string, onClick: (id: string) => void) => (
   players.filter(({id}) => id !== playerId).map(({id, name}) => (
-    <span key={id} style={{padding: 5, background: 'rebeccapurple', cursor: 'pointer', borderRadius: 5, margin: 5, color: 'white'}} onClick={() => onClick(id)}>
+    <span key={id} style={{padding: 5, background: 'rebeccapurple', borderRadius: 5, margin: 5, color: 'white', cursor: 'pointer'}} onClick={() => onClick(id)}>
       {name || id}
     </span>
   ))
@@ -146,6 +146,7 @@ export default class Index extends React.Component<{room?: string}, State> {
           <div style={styles.center}>
             Your name
             <input style={styles.input} type='text' placeholder='Your name' value={this.state.name} onChange={({target}) => {
+              if (target.value.length > 50) return;
               this.setState({name: target.value})
               this.socket.emit(Events.nameChange, {name: target.value})
             }} />     
