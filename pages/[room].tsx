@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import io from 'socket.io-client';
 import uuid from 'uuid/v4';
 
@@ -13,6 +14,36 @@ interface State {
   result?: Result;
 }
 
+const styles = {
+  button: {
+    backgroundColor: '#EE6C4D',
+    border: 'none',
+    borderRadius: 3,
+    color: '#FFFFFF',
+    cursor: 'pointer',
+    margin: 5,
+    padding: 5,
+    maxWidth: 200,
+    height: 50,
+    width: '50vw'
+  },
+  header: {
+    margin: '0 auto',
+    maxWidth: 600,
+  },
+  input: {
+    backgroundColor: '#E2FBFC',
+    border: 'none',
+    borderRadius: 3,
+    padding: 5,
+    marginLeft: 10
+  },
+  center: {
+    textAlign: 'center' as 'center',
+    width: '100vw'
+  }
+}
+
 const chunk = (arr: string[]) => {
   return arr.reduce<string[][]>((ar, el, i) => {
     const idx = (i + 1) % 3;
@@ -24,7 +55,7 @@ const chunk = (arr: string[]) => {
 const WordsBox = (words: string[], isPlayerTheCopycat: boolean, selectedWord: string, onClick?: (word: string) => void) => (
   chunk(words).map((words, i) => (
     <div key={i} style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100vw'}}>
-      {words.map((word) => <div key={word} style={{padding: 20, width: '30vw', textAlign: 'center', backgroundColor: selectedWord === word && !isPlayerTheCopycat ? 'blue' : 'initial'}} onClick={() => onClick && onClick(word)}>{word}</div>)}
+      {words.map((word) => <div key={word} style={{padding: 20, width: '30vw', textAlign: 'center', backgroundColor: selectedWord === word && !isPlayerTheCopycat ? '#EE6C4D' : 'initial'}} onClick={() => onClick && onClick(word)}>{word}</div>)}
     </div>
   ))
 )
@@ -105,78 +136,100 @@ export default class Index extends React.Component<{room?: string}, State> {
     const isPlayerDone = this.state.game && this.state.game.state && this.state.game.votes[this.state.game.state] && this.state.game.votes[this.state.game.state].find(({id}) => id === this.state.playerId);
     return (
       <div>
-        <div style={{backgroundImage: 'url(/static/cat-face.png)', backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'center', height: 100, width: '100vw'}} />
-        <h2>Players</h2>
-        <input type='text' placeholder='Your name' value={this.state.name} onChange={({target}) => {
-          this.setState({name: target.value})
-          this.socket.emit(Events.nameChange, {name: target.value})
-        }} />
-        {this.state.players.filter(({id}) => id !== this.state.playerId).map(({id, name}) => {
-          return (
-            <span key={id} style={{padding: 5, background: 'rebeccapurple', borderRadius: 5, margin: 5, color: 'white'}}>
-              {name || id}
-              {this.state.game.state !== GameState.end ? this.state.game && this.state.game.state && this.state.game.votes[this.state.game.state] && this.state.game.votes[this.state.game.state].find(({id: voteId}) => voteId === id) ? '✅' : '❔' : null}
-            </span>
-          )
-        })}
-        <h2>Game</h2>
-        {this.state.result ? (
-          <>
-            {this.state.result.copycatWon ? 'The copycat guessed the word correcty!' : null}
-            {this.state.result.guessedCopycat ? 'The team guessed who the copycat was!' : null}
-          </>
-        ) : null}
-        {/* {JSON.stringify(this.state.game)} */}
-        {isPlayerTheCopycat ? <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', height: 100, width: '100vw'}}>You are the copycat!</div> : ''}
-        {this.state.game && this.state.game.state === GameState.start ? (
-          <>
-            {isPlayerDone ? null : <button onClick={() => {
-              this.socket.emit(Events.vote, {state: this.state.game.state});
-            }}>Ready?</button>}
-            {isPlayerDone ? null : <button onClick={() => {
-              this.socket.emit(Events.startCategoryVote);
-            }}>Vote to change category</button>}
-          </>
-        ) : this.state.game && this.state.game.state === GameState.categoryVote ? (
-          <>
-            <select value={this.state.game.category} onChange={({target}) => {
-              this.socket.emit(Events.vote, {state: this.state.game.state, category: target.value});
-            }}>
-              {this.state.categories.map((category) =>
-                <option key={category} value={category}>{category}</option>
+        <Link href='/'>
+          <div style={{width: '100vw', textAlign: 'center', marginTop: '2em', cursor: 'pointer'}}>
+            <span style={{backgroundColor: '#EE6C4D', backgroundImage: 'url(/static/cat-face.png)', backgroundSize: 100, backgroundRepeat: 'no-repeat', backgroundPosition: 'top', height: 110, width: 110, borderRadius: 75, display: 'inline-block'  }} />
+            <h1>Copycat</h1>
+          </div>
+        </Link>
+        <div>
+          <div style={styles.center}>
+            Your name
+            <input style={styles.input} type='text' placeholder='Your name' value={this.state.name} onChange={({target}) => {
+              this.setState({name: target.value})
+              this.socket.emit(Events.nameChange, {name: target.value})
+            }} />     
+          </div>   
+          <div style={styles.header}>
+            <h2>Players</h2>
+          </div>
+          <div style={styles.center}>
+            {this.state.players.filter(({id}) => id !== this.state.playerId).map(({id, name}) => {
+              return (
+                <span key={id} style={{padding: 5, background: 'rebeccapurple', borderRadius: 5, margin: 5, color: 'white'}}>
+                  {name || id}
+                  {this.state.game.state !== GameState.end ? this.state.game && this.state.game.state && this.state.game.votes[this.state.game.state] && this.state.game.votes[this.state.game.state].find(({id: voteId}) => voteId === id) ? '✅' : '❔' : null}
+                </span>
+              )
+            })}
+          </div>
+          <div style={styles.header}>
+            <h2>Game</h2>
+          </div>
+          {this.state.result ? (
+            <div style={styles.center}>
+              {this.state.result.copycatWon ? <div>The copycat guessed the word correcty!</div> : null}
+              {this.state.result.guessedCopycat ? <div>he team guessed who the copycat was!</div> : null}
+            </div>
+          ) : null}
+          {isPlayerTheCopycat ? <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', height: 100, width: '100vw'}}>
+            <span style={{backgroundColor: '#EE6C4D', backgroundImage: 'url(/static/cat-face.png)', backgroundSize: 50, backgroundRepeat: 'no-repeat', backgroundPosition: 'top', height: 55, width: 55, borderRadius: 75, display: 'inline-block', marginRight: 10 }} />
+            You are the copycat!
+          </div> : ''}
+          {this.state.game && this.state.game.state === GameState.start ? (
+            <div style={styles.center}>
+              {isPlayerDone ? null : <button style={styles.button} onClick={() => {
+                this.socket.emit(Events.vote, {state: this.state.game.state});
+              }}>Ready?</button>}
+              {isPlayerDone ? null : <button style={styles.button} onClick={() => {
+                this.socket.emit(Events.startCategoryVote);
+              }}>Vote to change category</button>}
+            </div>
+          ) : this.state.game && this.state.game.state === GameState.categoryVote ? (
+            <div style={styles.center}>
+              <select value={this.state.game.category} onChange={({target}) => {
+                this.socket.emit(Events.vote, {state: this.state.game.state, category: target.value});
+              }}>
+                {this.state.categories.map((category) =>
+                  <option key={category} value={category}>{category}</option>
+                )}
+              </select>
+            </div>
+          ) : this.state.game && this.state.game.state === GameState.talking ? (
+            <>
+              {WordsBox(this.state.game.words, isPlayerTheCopycat, this.state.game.selectedWord)}
+              <div style={styles.center}>
+                {isPlayerDone ? null : <button style={styles.button} onClick={() => {
+                  this.socket.emit(Events.vote, {state: this.state.game.state});
+                }}>Had my turn!</button>}
+              </div>
+            </>
+          ) : this.state.game && this.state.game.state === GameState.decision ? (
+            <>
+              {WordsBox(this.state.game.words, isPlayerTheCopycat, this.state.game.selectedWord, isPlayerTheCopycat ? (word) => {
+                console.info('word', word);
+                this.socket.emit(Events.vote, {state: this.state.game.state, word});
+              } : undefined)}
+              <div style={styles.center}>
+              {isPlayerTheCopycat ? 'What\'s the word?' : (
+                <>
+                  Who's the copycat!?!
+                  {PlayerList(this.state.players, this.state.playerId, (id) => {
+                    console.info('-> id', id);
+                    this.socket.emit(Events.vote, {state: this.state.game.state, player: id});
+                  })}
+                </>
               )}
-            </select>
-          </>
-        ) : this.state.game && this.state.game.state === GameState.talking ? (
-          <>
-            {WordsBox(this.state.game.words, isPlayerTheCopycat, this.state.game.selectedWord)}
-            {isPlayerDone ? null : <button onClick={() => {
-              this.socket.emit(Events.vote, {state: this.state.game.state});
-            }}>Had my turn!</button>}
-          </>
-        ) : this.state.game && this.state.game.state === GameState.decision ? (
-          <>
-            {WordsBox(this.state.game.words, isPlayerTheCopycat, this.state.game.selectedWord, isPlayerTheCopycat ? (word) => {
-              console.info('word', word);
-              this.socket.emit(Events.vote, {state: this.state.game.state, word});
-            } : undefined)}
-            {isPlayerTheCopycat ? 'What\'s the word?' : (
-              <>
-                Who's the copycat!?!
-                {PlayerList(this.state.players, this.state.playerId, (id) => {
-                  console.info('-> id', id);
-                  this.socket.emit(Events.vote, {state: this.state.game.state, player: id});
-                })}
-              </>
-            )}
-          </>
-        ) : this.state.game && this.state.game.state === GameState.end ? (
-          <>
-            {isPlayerDone ? null : <button onClick={() => {
-              this.socket.emit(Events.vote, {state: this.state.game.state});
-            }}>Reset!</button>}
-          </>
-        ) :null}
+              </div>
+            </>
+          ) : this.state.game && this.state.game.state === GameState.end ? (
+            <div style={styles.center}>
+              {isPlayerDone ? null : <button style={styles.button} onClick={() => {
+                this.socket.emit(Events.vote, {state: this.state.game.state});
+              }}>Reset!</button>}
+            </div>
+          ) :null}
+        </div>
       </div>
     )
   }

@@ -27,7 +27,7 @@ const rooms = new Map<string, Room>();
 
 io.on('connection', client => {
   const {room, playerId, name} = client.handshake.query;
-  console.info('connection', room, playerId, name);
+  console.info('connection', room, playerId, name.replace(/\+/g, ' '));
   client.emit(Events.loadCategories, {categories: Object.keys(GameCategory)})
   client.on(Events.changeCategory, ({category}) => {
     const existingRoom = rooms.get(room);
@@ -48,10 +48,10 @@ io.on('connection', client => {
         [GameState.end]: [],
         [GameState.categoryVote]: []
       }
-    }, players: new Map<string, Player>([[playerId, {client, id: playerId, name}]])});
+    }, players: new Map<string, Player>([[playerId, {client, id: playerId, name: name.replace(/\+/g, ' ')}]])});
   } else {
     const existingRoom = rooms.get(room);
-    existingRoom.players.set(playerId, {client, id: playerId, name});
+    existingRoom.players.set(playerId, {client, id: playerId, name: name.replace(/\+/g, ' ')});
     rooms.set(room, existingRoom);
   }
   client.join(room);
@@ -59,6 +59,7 @@ io.on('connection', client => {
   emitGameChange(io, room);
   client.on('disconnect', () => {
     const existingRoom = rooms.get(room);
+    if (!existingRoom) return;
     existingRoom.players.delete(playerId);
     if (existingRoom.players.size < 1) {
       rooms.delete(room);
