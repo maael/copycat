@@ -108,6 +108,7 @@ const styles = {
   winBanner: {
     padding: 10,
     backgroundColor: '#EE6C4D',
+    margin: 5
   }
 }
 
@@ -240,7 +241,7 @@ export default class Index extends React.Component<{room?: string}, State> {
             })}
           </div>
           <div style={styles.header}>
-            <h2>Game</h2>
+            <h2>Game <small>(Category: {game.category})</small></h2>
           </div>
           {result ? (
             <div style={styles.center}>
