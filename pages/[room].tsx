@@ -42,6 +42,72 @@ const styles = {
   center: {
     textAlign: 'center' as 'center',
     width: '100vw'
+  },
+  shareBanner: {
+    backgroundColor: '#F1866D',
+    textAlign: 'center' as 'center',
+    fontSize: 14,
+    padding: 2
+  },
+  shareBannerLink: {
+    fontWeight: 'bold' as 'bold',
+    color: '#FFFFFF'
+  },
+  shareBannerClose: {
+    cursor: 'pointer' as 'pointer',
+    position: 'absolute' as 'absolute',
+    right: 10,
+    top: 1
+  },
+  mainHeader: {
+    width: '100vw',
+    textAlign: 'center' as 'center',
+    marginTop: '2em',
+    cursor: 'pointer' as 'pointer'
+  },
+  mainHeaderCat: {
+    backgroundColor: '#EE6C4D',
+    backgroundImage: 'url(/static/cat-face.png)',
+    backgroundSize: 100,
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'top',
+    height: 110,
+    width: 110,
+    borderRadius: 75,
+    display: 'inline-block'
+  },
+  playerTag: {
+    padding: 10,
+    background: '#EE6C4D',
+    borderRadius: 5,
+    margin: 5,
+    color: 'white'
+  },
+  copycatBanner: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 100,
+    width: '100vw'
+  },
+  copycatCat: {
+    backgroundColor: '#EE6C4D',
+    backgroundImage: 'url(/static/cat-face.png)',
+    backgroundSize: 50,
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'top',
+    height: 55,
+    width: 55,
+    borderRadius: 75,
+    display: 'inline-block',
+    marginRight: 10
+  },
+  margined: {
+    margin: 20
+  },
+  winBanner: {
+    padding: 10,
+    backgroundColor: '#EE6C4D',
   }
 }
 
@@ -140,14 +206,14 @@ export default class Index extends React.Component<{room?: string}, State> {
     return (
       <div>
         {showJoin ? (
-          <div style={{backgroundColor: '#F1866D', textAlign: 'center', fontSize: 14, padding: 2}}>
-            Share <a style={{fontWeight: 'bold', color: '#FFFFFF'}} href={typeof window !== 'undefined' ? window.location.href : ''}>{typeof window !== 'undefined' ? window.location.href : ''}</a> with your friends
-            <span onClick={() => this.setState({showJoin: false})} style={{cursor: 'pointer', position: 'absolute', right: 10, top: 1}}>x</span>
+          <div style={styles.shareBanner}>
+            Share <a style={styles.shareBannerLink} href={typeof window !== 'undefined' ? window.location.href : ''}>{typeof window !== 'undefined' ? window.location.href : ''}</a> with your friends
+            <span onClick={() => this.setState({showJoin: false})} style={styles.shareBannerClose}>x</span>
           </div>
         ) : null}
         <Link href='/'>
-          <div style={{width: '100vw', textAlign: 'center', marginTop: '2em', cursor: 'pointer'}}>
-            <span style={{backgroundColor: '#EE6C4D', backgroundImage: 'url(/static/cat-face.png)', backgroundSize: 100, backgroundRepeat: 'no-repeat', backgroundPosition: 'top', height: 110, width: 110, borderRadius: 75, display: 'inline-block'  }} />
+          <div style={styles.mainHeader}>
+            <span style={styles.mainHeaderCat} />
             <h1>Copycat</h1>
           </div>
         </Link>
@@ -166,7 +232,7 @@ export default class Index extends React.Component<{room?: string}, State> {
           <div style={styles.center}>
             {players.filter(({id}) => id !== playerId).map(({id, name}) => {
               return (
-                <span key={id} style={{padding: 10, background: '#EE6C4D', borderRadius: 5, margin: 5, color: 'white'}}>
+                <span key={id} style={styles.playerTag}>
                   {name || id}
                   {game.state !== GameState.end ? game && game.state && game.votes[game.state] && game.votes[game.state].find(({id: voteId}) => voteId === id) ? ' ✅' : '❔' : null}
                 </span>
@@ -178,12 +244,12 @@ export default class Index extends React.Component<{room?: string}, State> {
           </div>
           {result ? (
             <div style={styles.center}>
-              {result.copycatWon ? <div>The copycat guessed the word correcty!</div> : null}
-              {result.guessedCopycat ? <div>The team guessed who the copycat was!</div> : null}
+              {result.copycatWon ? <div style={styles.winBanner}>The copycat guessed the word correcty!</div> : null}
+              {result.guessedCopycat ? <div style={styles.winBanner}>The team guessed who the copycat was!</div> : null}
             </div>
           ) : null}
-          {isPlayerTheCopycat ? <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', height: 100, width: '100vw'}}>
-            <span style={{backgroundColor: '#EE6C4D', backgroundImage: 'url(/static/cat-face.png)', backgroundSize: 50, backgroundRepeat: 'no-repeat', backgroundPosition: 'top', height: 55, width: 55, borderRadius: 75, display: 'inline-block', marginRight: 10 }} />
+          {isPlayerTheCopycat ? <div style={styles.copycatBanner}>
+            <span style={styles.copycatCat} />
             You are the copycat!
           </div> : ''}
           {game && game.state === GameState.start ? (
@@ -220,9 +286,9 @@ export default class Index extends React.Component<{room?: string}, State> {
                 this.socket.emit(Events.vote, {state: game.state, word});
               } : undefined)}
               <div style={styles.center}>
-              {isPlayerTheCopycat ? <div style={{margin: 20}}>What's the word?</div> : (
+              {isPlayerTheCopycat ? <div style={styles.margined}>What's the word?</div> : (
                 <>
-                  <div style={{margin: 20}}>Who's the copycat!?!</div>
+                  <div style={styles.margined}>Who's the copycat!?!</div>
                   <div style={styles.center}>
                     {PlayerList(players, playerId, (id) => {
                       this.socket.emit(Events.vote, {state: game.state, player: id});
@@ -235,6 +301,7 @@ export default class Index extends React.Component<{room?: string}, State> {
           ) : game && game.state === GameState.end ? (
             <div style={styles.center}>
               {isPlayerDone ? null : <button style={styles.button} onClick={() => {
+                this.setState({result: undefined});
                 this.socket.emit(Events.vote, {state: game.state});
               }}>Reset!</button>}
             </div>
