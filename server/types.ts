@@ -46,6 +46,7 @@ export enum Events {
   nameChange = 'nameChange',
   startCategoryVote = 'startCategoryVote',
   result = 'result',
+  waitForStart = 'waitForStart',
 }
 
 export interface Result {

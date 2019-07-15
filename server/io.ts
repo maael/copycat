@@ -36,6 +36,11 @@ io.on('connection', client => {
       emitGameChange(io, room);
     }
   });
+  if (rooms.has(room) && rooms.get(room).game.state !== GameState.start && !rooms.get(room).players.has(playerId)) {
+    client.emit(Events.waitForStart);
+    client.join(room);
+    return;
+  }
   if (!rooms.has(room)) {
     rooms.set(room, {io, id: room, game: {
       category: GameCategory.basic,
