@@ -12,6 +12,7 @@ interface State {
   game: Partial<Game>;
   categories: string[];
   result?: Result;
+  showJoin: boolean;
 }
 
 const styles = {
@@ -74,7 +75,8 @@ export default class Index extends React.Component<{room?: string}, State> {
     playerId: undefined,
     name: '',
     game: {},
-    categories: []
+    categories: [],
+    showJoin: true
   }
   socket: typeof io;
 
@@ -136,6 +138,12 @@ export default class Index extends React.Component<{room?: string}, State> {
     const isPlayerDone = this.state.game && this.state.game.state && this.state.game.votes[this.state.game.state] && this.state.game.votes[this.state.game.state].find(({id}) => id === this.state.playerId);
     return (
       <div>
+        {this.state.showJoin ? (
+          <div style={{backgroundColor: '#F1866D', textAlign: 'center', fontSize: 14, padding: 2}}>
+            Share <a style={{fontWeight: 'bold', color: '#FFFFFF'}} href={typeof window !== 'undefined' ? window.location.href : ''}>{typeof window !== 'undefined' ? window.location.href : ''}</a> with your friends
+            <span onClick={() => this.setState({showJoin: false})} style={{cursor: 'pointer', position: 'absolute', right: 10, top: 1}}>x</span>
+          </div>
+        ) : null}
         <Link href='/'>
           <div style={{width: '100vw', textAlign: 'center', marginTop: '2em', cursor: 'pointer'}}>
             <span style={{backgroundColor: '#EE6C4D', backgroundImage: 'url(/static/cat-face.png)', backgroundSize: 100, backgroundRepeat: 'no-repeat', backgroundPosition: 'top', height: 110, width: 110, borderRadius: 75, display: 'inline-block'  }} />

@@ -4,7 +4,7 @@ import Head from 'next/head';
 import Normalize from '../components/styling/Normalize';
 import Global from '../components/styling/Global';
 
-class MyApp extends App {
+class Copycat extends App {
   render() {
     const { Component, pageProps } = this.props
 
@@ -22,4 +22,4 @@ class MyApp extends App {
   }
 }
 
-export default MyApp
+export default Copycat
