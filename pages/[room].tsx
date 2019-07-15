@@ -69,7 +69,7 @@ export default class Index extends React.Component<{room?: string}, State> {
       name
     });
     const hostnameParts = window.location.hostname.split('.');
-    if (window.location.hostname === 'localhost') {
+    if (window.location.hostname !== 'localhost') {
       hostnameParts.splice(0, 1, `${hostnameParts[0]}-ws`);
     }
     const hostname = hostnameParts.join('.');
