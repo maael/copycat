@@ -13,6 +13,11 @@ class Copycat extends App {
         <Head>
           <title>Copycat</title>
           <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <link rel="icon" type="image/x-icon" href="/static/favicon.ico" />
+          <meta name="author" content="Matthew Elphick" />
+          <meta name="description" content="A game about trying to copy others" />
+          <meta name="theme-color" content="#EE6C4D" />
+          <meta name="color-scheme" content="dark light" />
         </Head>
         <Normalize />
         <Global />

@@ -31,6 +31,7 @@ const styles = {
   header: {
     margin: '0 auto',
     maxWidth: 600,
+    padding: '0 10px'
   },
   input: {
     backgroundColor: '#E2FBFC',
@@ -47,7 +48,7 @@ const styles = {
     backgroundColor: '#F1866D',
     textAlign: 'center' as 'center',
     fontSize: 14,
-    padding: 2
+    padding: '2px 20px'
   },
   shareBannerLink: {
     fontWeight: 'bold' as 'bold',
@@ -206,7 +207,7 @@ export default class Index extends React.Component<{room?: string}, State> {
     const isPlayerDone = game && game.state && game.votes[game.state] && game.votes[game.state].find(({id}) => id === playerId);
     return (
       <div>
-        {showJoin ? (
+        {game.state === GameState.start && showJoin ? (
           <div style={styles.shareBanner}>
             Share <a style={styles.shareBannerLink} href={typeof window !== 'undefined' ? window.location.href : ''}>{typeof window !== 'undefined' ? window.location.href : ''}</a> with your friends
             <span onClick={() => this.setState({showJoin: false})} style={styles.shareBannerClose}>x</span>

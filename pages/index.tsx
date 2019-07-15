@@ -13,7 +13,7 @@ export default () => (
         Start a new game!
       </div>
     </Link>
-    <div style={{maxWidth: 600, margin: '0 auto'}}>
+    <div style={{maxWidth: 600, margin: '0 auto', padding: '0px 10px'}}>
       <h2>How to play</h2>
       <ol>
         <li style={{padding: 5}}>Create a game <a style={{color: '#FFFFFF', fontWeight: 'bold'}} href={`/meow-${Math.floor(Math.random()*100000)}`}>here</a></li>
