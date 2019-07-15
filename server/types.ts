@@ -1,10 +1,16 @@
 import {Server, Socket} from "socket.io";
 
 export enum GameCategory {
-  basic = 'basic',
-  food = 'food',
-  drinks = 'drinks',
-  alcohol = 'alcohol'
+  'Basic' = 'Basic',
+  'Food' = 'Food',
+  'Drinks' = 'Drinks',
+  'Alcohol' = 'Alcohol',
+  'Musicals' = 'Musicals',
+  'Zoo' = 'Zoo',
+  'Jobs' = 'Jobs',
+  'Movies' = 'Movies',
+  'Star Wars' = 'Star Wars',
+  'Transport' = 'Transport',
 }
 
 export enum GameState {

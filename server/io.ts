@@ -43,7 +43,7 @@ io.on('connection', client => {
   }
   if (!rooms.has(room)) {
     rooms.set(room, {io, id: room, game: {
-      category: GameCategory.basic,
+      category: GameCategory.Basic,
       words: [],
       state: GameState.start,
       votes: {
