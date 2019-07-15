@@ -11,6 +11,7 @@ export enum GameCategory {
   'Movies' = 'Movies',
   'Star Wars' = 'Star Wars',
   'Transport' = 'Transport',
+  'Classic Boardgames' = 'Classic Boardgames'
 }
 
 export enum GameState {
