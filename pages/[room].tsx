@@ -170,7 +170,7 @@ export default class Index extends React.Component<{room?: string}, State> {
           {this.state.result ? (
             <div style={styles.center}>
               {this.state.result.copycatWon ? <div>The copycat guessed the word correcty!</div> : null}
-              {this.state.result.guessedCopycat ? <div>he team guessed who the copycat was!</div> : null}
+              {this.state.result.guessedCopycat ? <div>The team guessed who the copycat was!</div> : null}
             </div>
           ) : null}
           {isPlayerTheCopycat ? <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', height: 100, width: '100vw'}}>
