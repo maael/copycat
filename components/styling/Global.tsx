@@ -7,6 +7,7 @@ export default () => (
       background-color: #293241;
       color: #E0FBFC;
       display: flex;
+      padding-bottom: 20px;
     }
     a {
       text-decoration: none;

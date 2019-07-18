@@ -81,7 +81,7 @@ io.on('connection', client => {
   client.on(Events.vote, ({state, ...extra}) => {
     console.info('vote', playerId, state);
     const existingRoom = rooms.get(room);
-    existingRoom.game.votes[state] = [...existingRoom.game.votes[state], {id: playerId, vote: extra}];
+    existingRoom.game.votes[state] = [...existingRoom.game.votes[state].filter(({id}) => playerId !== id), {id: playerId, vote: extra}];
     if (JSON.stringify([...existingRoom.players.keys()].sort()) === JSON.stringify(existingRoom.game.votes[existingRoom.game.state].map(({id}) => id).sort())) {
       console.info('progressing from', existingRoom.game.state);
       if (existingRoom.game.state === GameState.start) {
